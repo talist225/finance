@@ -111,22 +111,34 @@
       .btn-primary {
         background-color: var(--primary-color);
         border-color: var(--primary-color);
-        transition: background-color 0.3s ease;
-        font-size: calc(0.45rem * var(--font-scale));
-        padding: calc(0.15rem * var(--font-scale))
-          calc(0.3rem * var(--font-scale));
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        font-size: calc(0.9rem * var(--font-scale));
+        padding: calc(0.5rem * var(--font-scale)) calc(1rem * var(--font-scale));
         border-radius: 8px;
-      }
-      .btn-primary.position-fixed {
-        font-size: calc(1.5rem * var(--font-scale));
-        padding: calc(0.5rem * var(--font-scale));
-        width: calc(50px * var(--section-scale));
-        height: calc(50px * var(--section-scale));
-        border-radius: 50%;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       }
       .btn-primary:hover {
         background-color: #0056b3;
         border-color: #0056b3;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+      }
+      .dark-mode .btn-primary {
+        background-color: var(--dark-accent);
+        border-color: var(--dark-accent);
+      }
+      .dark-mode .btn-primary:hover {
+        background-color: #3b82f6;
+        border-color: #3b82f6;
+      }
+      .btn-primary.position-fixed {
+        font-size: calc(1.2rem * var(--font-scale));
+        padding: calc(0.4rem * var(--font-scale));
+        width: calc(40px * var(--section-scale));
+        height: calc(40px * var(--section-scale));
+        border-radius: 4px;
+        z-index: 1000;
+        top: calc(10px * var(--section-scale));
+        right: calc(10px * var(--section-scale));
       }
       .btn-nav {
         color: var(--primary-color);
@@ -146,6 +158,14 @@
         color: #0056b3;
         border-color: #007bff;
       }
+      .dark-mode .btn-nav {
+        color: var(--dark-accent);
+      }
+      .dark-mode .btn-nav:hover,
+      .dark-mode .btn-nav.active {
+        color: #3b82f6;
+        border-color: var(--dark-accent);
+      }
       .btn-settings {
         background-color: var(--primary-color);
         color: #ffffff;
@@ -157,9 +177,16 @@
         justify-content: center;
         font-size: calc(1.2rem * var(--font-scale));
         transition: background-color 0.3s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       }
       .btn-settings:hover {
         background-color: #0056b3;
+      }
+      .dark-mode .btn-settings {
+        background-color: var(--dark-accent);
+      }
+      .dark-mode .btn-settings:hover {
+        background-color: #3b82f6;
       }
       .btn-success {
         white-space: nowrap;
@@ -323,7 +350,7 @@
         background-color: var(--dark-accent);
       }
       .toast-header strong {
-        ms-auto: auto;
+        margin-left: auto;
       }
       .card-header {
         cursor: pointer;
@@ -369,9 +396,23 @@
       .footer {
         text-align: center;
         padding: calc(0.5rem * var(--section-scale));
-        margin-bottom: 0;
+        margin-top: calc(2rem * var(--section-scale));
         font-size: calc(0.9rem * var(--font-scale));
         border-top: 1px solid rgba(0, 0, 0, 0.1);
+      }
+      .insights-list {
+        list-style-type: none;
+        padding: 0;
+      }
+      .insights-list li {
+        padding: calc(0.5rem * var(--font-scale));
+        margin-bottom: calc(0.5rem * var(--section-scale));
+        background-color: rgba(0, 123, 255, 0.1);
+        border-radius: 4px;
+        font-size: calc(0.9rem * var(--font-scale));
+      }
+      .dark-mode .insights-list li {
+        background-color: rgba(96, 165, 250, 0.1);
       }
     </style>
   </head>
@@ -421,7 +462,7 @@
         const [filterDateStart, setFilterDateStart] = useState("");
         const [filterDateEnd, setFilterDateEnd] = useState("");
         const [darkMode, setDarkMode] = useState(true);
-        const [fontSize, setFontSize] = useState("medium"); // Added fontSize state
+        const [fontSize, setFontSize] = useState("medium");
         const [error, setError] = useState("");
         const [savingsName, setSavingsName] = useState("");
         const [savingsAmount, setSavingsAmount] = useState("");
@@ -464,7 +505,6 @@
           "מזומן",
         ];
 
-        // Load data from localStorage
         useEffect(() => {
           const savedTransactions = JSON.parse(
             localStorage.getItem("transactions") || "[]"
@@ -482,12 +522,11 @@
           setFontSize(savedFontSize);
         }, []);
 
-        // Save data to localStorage and apply dark mode and font size
         useEffect(() => {
           localStorage.setItem("transactions", JSON.stringify(transactions));
           localStorage.setItem("savings", JSON.stringify(savings));
           localStorage.setItem("darkMode", JSON.stringify(darkMode));
-          localStorage.setItem("fontSize", JSON.stringify(fontSize));
+          localStorage.setItem("fontSize", fontSize);
           document.body.className = darkMode ? "bg-dark dark-mode" : "bg-light";
           const root = document.documentElement;
           root.style.setProperty(
@@ -500,7 +539,6 @@
           );
         }, [transactions, savings, darkMode, fontSize]);
 
-        // Update savings chart
         useEffect(() => {
           if (savingsChartRef.current && window.Chart) {
             const ctx = savingsChartRef.current.getContext("2d");
@@ -570,7 +608,6 @@
           }
         }, [savings, darkMode, fontSize]);
 
-        // Show toast
         const showToast = (message) => {
           const toastContainer = document.getElementById("toastContainer");
           const toastEl = document.createElement("div");
@@ -608,7 +645,6 @@
             setError("חובה להזין קטגוריה");
             return;
           }
-
           const newTransaction = {
             id: Date.now(),
             description,
@@ -617,7 +653,6 @@
             category,
             date: new Date().toISOString().split("T")[0],
           };
-
           setTransactions([...transactions, newTransaction]);
           setDescription("");
           setAmount("");
@@ -644,7 +679,6 @@
             setSavingsError("חובה לבחור מיקום");
             return;
           }
-
           const newSavings = {
             id: Date.now(),
             name: savingsName,
@@ -652,7 +686,6 @@
             location: savingsLocation,
             date: new Date().toISOString().split("T")[0],
           };
-
           setSavings([...savings, newSavings]);
           setSavingsName("");
           setSavingsAmount("");
@@ -698,7 +731,6 @@
             setEditError("חובה להזין קטגוריה");
             return;
           }
-
           const updatedTransaction = {
             ...editTransaction,
             description: editDescription,
@@ -706,7 +738,6 @@
             type: editType,
             category: editCategory,
           };
-
           setTransactions(
             transactions.map((t) =>
               t.id === editTransaction.id ? updatedTransaction : t
@@ -732,7 +763,6 @@
           modal.show();
         };
 
-        // Filter transactions
         const filteredTransactions = transactions.filter((t) => {
           const date = new Date(t.date);
           const start = filterDateStart ? new Date(filterDateStart) : null;
@@ -745,7 +775,6 @@
           );
         });
 
-        // Calculate totals
         const totalIncome = filteredTransactions
           .filter((t) => t.type === "income")
           .reduce((sum, t) => sum + t.amount, 0);
@@ -756,7 +785,6 @@
 
         const balance = totalIncome - totalExpenses;
 
-        // Group by category for summary and pie chart
         const categorySummary = filteredTransactions.reduce((acc, t) => {
           acc[t.category] =
             (acc[t.category] || 0) +
@@ -764,7 +792,6 @@
           return acc;
         }, {});
 
-        // Custom pie chart data
         const categoryData = predefinedCategories.reduce((acc, cat) => {
           const total = filteredTransactions
             .filter((t) => t.category === cat && t.type === "expense")
@@ -820,7 +847,6 @@
           })
         );
 
-        // Generate SVG pie chart
         const generatePieChart = () => {
           if (!totalCategoryAmount) {
             return React.createElement(
@@ -899,7 +925,6 @@
           );
         };
 
-        // Group by month
         const monthlySummary = filteredTransactions.reduce((acc, t) => {
           const date = new Date(t.date);
           if (isNaN(date.getTime())) return acc;
@@ -913,7 +938,6 @@
           return acc;
         }, {});
 
-        // Calculate savings change
         const totalSavings = savings.reduce((sum, s) => sum + s.amount, 0);
         const previousSavings = savings
           .slice(0, -1)
@@ -926,7 +950,111 @@
               ).toFixed(2)
             : 0;
 
-        // Export to CSV
+        const generateInsights = () => {
+          const insights = [];
+          const expenseCategories = filteredTransactions
+            .filter((t) => t.type === "expense")
+            .reduce((acc, t) => {
+              acc[t.category] = (acc[t.category] || 0) + t.amount;
+              return acc;
+            }, {});
+          const topCategory = Object.entries(expenseCategories).reduce(
+            (max, [cat, amount]) =>
+              amount > (max.amount || 0) ? { category: cat, amount } : max,
+            {}
+          );
+          if (topCategory.category) {
+            insights.push(
+              `הקטגוריה עם ההוצאה הגבוהה ביותר היא "${
+                topCategory.category
+              }" עם סך של ${topCategory.amount.toFixed(
+                2
+              )} ₪. שקול לבדוק אפשרויות לחיסכון בקטגוריה זו.`
+            );
+          }
+          if (balance < 0) {
+            insights.push(
+              `המאזן שלך שלילי (${balance.toFixed(
+                2
+              )} ₪). מומלץ להפחית הוצאות או להגדיל הכנסות כדי לשפר את המצב הפיננסי.`
+            );
+          } else if (balance < totalExpenses * 0.1) {
+            insights.push(
+              `המאזן שלך (${balance.toFixed(
+                2
+              )} ₪) נמוך יחסית להוצאות (${totalExpenses.toFixed(
+                2
+              )} ₪). שקול להגדיר תקציב חודשי להוצאות.`
+            );
+          } else {
+            insights.push(
+              `המאזן שלך חיובי (${balance.toFixed(
+                2
+              )} ₪). כל הכבוד! המשך לנהל את הכספים שלך בחוכמה.`
+            );
+          }
+          if (totalSavings === 0) {
+            insights.push(
+              "לא נרשמו חסכונות. מומלץ להתחיל להפריש סכומים לחיסכון לעתיד יציב יותר."
+            );
+          } else if (savingsChange < 0) {
+            insights.push(
+              `החסכונות שלך ירדו ב-${Math.abs(
+                savingsChange
+              )}%. בדוק אם יש הוצאות בלתי צפויות שמשפיעות על החסכונות.`
+            );
+          } else if (savingsChange > 0) {
+            insights.push(
+              `החסכונות שלך גדלו ב-${savingsChange}%! המשך להגדיל את החסכונות שלך על ידי הפרשות קבועות.`
+            );
+          } else {
+            insights.push(
+              `החסכונות שלך נשארו ללא שינוי (${totalSavings.toFixed(
+                2
+              )} ₪). שקול להגדיל את ההפרשות החודשיות לחיסכון.`
+            );
+          }
+          const savingsByLocation = savings.reduce((acc, s) => {
+            acc[s.location] = (acc[s.location] || 0) + s.amount;
+            return acc;
+          }, {});
+          const dominantLocation = Object.entries(savingsByLocation).reduce(
+            (max, [loc, amount]) =>
+              amount > (max.amount || 0) ? { location: loc, amount } : max,
+            {}
+          );
+          if (
+            dominantLocation.location &&
+            dominantLocation.amount / totalSavings > 0.7
+          ) {
+            insights.push(
+              `רוב החסכונות שלך (${(
+                (dominantLocation.amount / totalSavings) *
+                100
+              ).toFixed(1)}%) נמצאים ב"${
+                dominantLocation.location
+              }". שקול לגוון את החסכונות שלך כדי להפחית סיכונים.`
+            );
+          }
+          const monthlyExpenses =
+            Object.values(monthlySummary).reduce(
+              (sum, m) => sum + m.expenses,
+              0
+            ) / Object.keys(monthlySummary).length;
+          if (monthlyExpenses > totalIncome * 0.5 && monthlyExpenses > 0) {
+            insights.push(
+              `ההוצאות החודשיות הממוצעות שלך (${monthlyExpenses.toFixed(
+                2
+              )} ₪) מהוות יותר מ-50% מההכנסות. מומלץ להגדיר תקציב קבוע להוצאות כדי לשמור על יציבות פיננסית.`
+            );
+          }
+          return insights.length > 0
+            ? insights
+            : [
+                "אין מספיק נתונים כדי לספק תובנות. הוסף פעולות וחסכונות לקבלת המלצות מותאמות.",
+              ];
+        };
+
         const exportToCSV = () => {
           const headers = "תיאור,סכום,סוג,קטגוריה,תאריך\n";
           const csv =
@@ -955,12 +1083,10 @@
         return React.createElement(
           "div",
           { className: "container my-4" },
-          // Toast Container
           React.createElement("div", {
             id: "toastContainer",
             className: "toast-container",
           }),
-          // Edit Transaction Modal
           React.createElement(
             "div",
             {
@@ -1101,7 +1227,6 @@
               )
             )
           ),
-          // Settings Modal
           React.createElement(
             "div",
             {
@@ -1179,7 +1304,6 @@
               )
             )
           ),
-          // Sidebar Toggle Button
           React.createElement(
             "button",
             {
@@ -1191,7 +1315,6 @@
             },
             "☰"
           ),
-          // Sidebar
           React.createElement(
             "div",
             {
@@ -1253,8 +1376,22 @@
                   "חסכונות"
                 ),
                 React.createElement(
+                  "a",
+                  {
+                    className: `nav-link btn-nav ${
+                      activeTab === "insights" ? "active" : ""
+                    }`,
+                    href: "#",
+                    onClick: (e) => {
+                      e.preventDefault();
+                      setActiveTab("insights");
+                    },
+                  },
+                  "תובנות"
+                ),
+                React.createElement(
                   "div",
-                  { className: "d-flex justify-content-around mt-auto mb-3" },
+                  { className: "d-flex justify-content-between mt-auto" },
                   React.createElement(
                     "button",
                     {
@@ -1277,7 +1414,6 @@
               )
             )
           ),
-          // Main Content
           React.createElement(
             "div",
             { className: "me-3 position-relative" },
@@ -1292,12 +1428,10 @@
               )
             ),
             React.createElement("h1", { className: "fade-in" }, "Finely"),
-            // Transactions Tab
             activeTab === "transactions" &&
               React.createElement(
                 "div",
                 null,
-                // Transaction Form
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1410,13 +1544,7 @@
                           "button",
                           {
                             onClick: addTransaction,
-                            className: "btn btn-primary",
-                            style: {
-                              width: "50%",
-                              fontSize: "1em",
-                              display: "block",
-                              margin: "0 auto",
-                            },
+                            className: "btn btn-primary w-100",
                           },
                           "הוסף פעולה"
                         )
@@ -1424,7 +1552,6 @@
                     )
                   )
                 ),
-                // Filters
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1539,7 +1666,6 @@
                     )
                   )
                 ),
-                // Summary
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1640,7 +1766,6 @@
                     )
                   )
                 ),
-                // Transactions Pie Chart
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1672,7 +1797,6 @@
                     generatePieChart()
                   )
                 ),
-                // Monthly Summary
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1743,7 +1867,6 @@
                     )
                   )
                 ),
-                // Category Summary
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in category-summary" },
@@ -1806,7 +1929,6 @@
                     )
                   )
                 ),
-                // Transactions Table
                 React.createElement(
                   "div",
                   { className: "card bg-light fade-in" },
@@ -1837,10 +1959,7 @@
                     ),
                     React.createElement(
                       "button",
-                      {
-                        onClick: exportToCSV,
-                        className: "btn btn-success",
-                      },
+                      { onClick: exportToCSV, className: "btn btn-success" },
                       "יצוא ל-CSV"
                     )
                   ),
@@ -1922,12 +2041,10 @@
                   )
                 )
               ),
-            // Savings Tab
             activeTab === "savings" &&
               React.createElement(
                 "div",
                 null,
-                // Savings Form
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -1967,7 +2084,7 @@
                       { className: "row g-3" },
                       React.createElement(
                         "div",
-                        { className: "col-md-6" },
+                        { className: "col-md-4" },
                         React.createElement("input", {
                           type: "text",
                           placeholder: "שם החיסכון",
@@ -1978,7 +2095,7 @@
                       ),
                       React.createElement(
                         "div",
-                        { className: "col-md-6" },
+                        { className: "col-md-4" },
                         React.createElement("input", {
                           type: "number",
                           placeholder: "סכום",
@@ -1989,7 +2106,7 @@
                       ),
                       React.createElement(
                         "div",
-                        { className: "col-md-6" },
+                        { className: "col-md-4" },
                         React.createElement(
                           "select",
                           {
@@ -2026,88 +2143,6 @@
                     )
                   )
                 ),
-                // Savings Summary
-                React.createElement(
-                  "div",
-                  { className: "card mb-4 bg-light fade-in" },
-                  React.createElement(
-                    "button",
-                    {
-                      className: "card-header collapse-toggle",
-                      type: "button",
-                      "data-bs-toggle": "collapse",
-                      "data-bs-target": "#savingsSummaryCollapse",
-                      "aria-expanded": "true",
-                      "aria-controls": "savingsSummaryCollapse",
-                    },
-                    React.createElement(
-                      "h2",
-                      { className: "card-title h5 fw-bold mb-0" },
-                      "סיכום חסכונות"
-                    ),
-                    React.createElement("i", {
-                      className: "bi bi-chevron-down",
-                    })
-                  ),
-                  React.createElement(
-                    "div",
-                    {
-                      className: "card-body collapse show",
-                      id: "savingsSummaryCollapse",
-                    },
-                    React.createElement(
-                      "div",
-                      { className: "row g-3" },
-                      React.createElement(
-                        "div",
-                        { className: "col-md-6" },
-                        React.createElement(
-                          "div",
-                          { className: "card bg-primary text-white" },
-                          React.createElement(
-                            "div",
-                            { className: "card-body" },
-                            React.createElement(
-                              "h3",
-                              { className: "card-title h6 fw-bold" },
-                              "סך החסכונות"
-                            ),
-                            React.createElement(
-                              "p",
-                              { className: "card-text fs-5" },
-                              totalSavings.toFixed(2) + " ₪"
-                            )
-                          )
-                        )
-                      ),
-                      React.createElement(
-                        "div",
-                        { className: "col-md-6" },
-                        React.createElement(
-                          "div",
-                          { className: "card bg-success text-white" },
-                          React.createElement(
-                            "div",
-                            { className: "card-body" },
-                            React.createElement(
-                              "h3",
-                              { className: "card-title h6 fw-bold" },
-                              "שינוי"
-                            ),
-                            React.createElement(
-                              "p",
-                              { className: "card-text fs-5" },
-                              savingsChange >= 0
-                                ? `+${savingsChange}%`
-                                : `${savingsChange}%`
-                            )
-                          )
-                        )
-                      )
-                    )
-                  )
-                ),
-                // Savings Chart
                 React.createElement(
                   "div",
                   { className: "card mb-4 bg-light fade-in" },
@@ -2136,14 +2171,15 @@
                       className: "card-body collapse show",
                       id: "savingsChartCollapse",
                     },
-                    React.createElement(
-                      "div",
-                      { className: "chart-container" },
-                      React.createElement("canvas", { ref: savingsChartRef })
-                    )
+                    savings.length === 0
+                      ? React.createElement(
+                          "div",
+                          { className: "text-center text-muted" },
+                          "אין נתונים להצגה"
+                        )
+                      : React.createElement("canvas", { ref: savingsChartRef })
                   )
                 ),
-                // Savings Table
                 React.createElement(
                   "div",
                   { className: "card bg-light fade-in" },
@@ -2184,7 +2220,7 @@
                           React.createElement(
                             "tr",
                             null,
-                            React.createElement("th", null, "שם"),
+                            React.createElement("th", null, "שם החיסכון"),
                             React.createElement("th", null, "סכום"),
                             React.createElement("th", null, "מיקום"),
                             React.createElement("th", null, "תאריך"),
@@ -2230,16 +2266,52 @@
                   )
                 )
               ),
-            // Footer
+            activeTab === "insights" &&
+              React.createElement(
+                "div",
+                null,
+                React.createElement(
+                  "div",
+                  { className: "card mb-4 bg-light fade-in" },
+                  React.createElement(
+                    "button",
+                    {
+                      className: "card-header collapse-toggle",
+                      type: "button",
+                      "data-bs-toggle": "collapse",
+                      "data-bs-target": "#insightsCollapse",
+                      "aria-expanded": "true",
+                      "aria-controls": "insightsCollapse",
+                    },
+                    React.createElement(
+                      "h2",
+                      { className: "card-title h5 fw-bold mb-0" },
+                      "תובנות פיננסיות"
+                    ),
+                    React.createElement("i", {
+                      className: "bi bi-chevron-down",
+                    })
+                  ),
+                  React.createElement(
+                    "div",
+                    {
+                      className: "card-body collapse show",
+                      id: "insightsCollapse",
+                    },
+                    React.createElement(
+                      "ul",
+                      { className: "insights-list" },
+                      generateInsights().map((insight, index) =>
+                        React.createElement("li", { key: index }, insight)
+                      )
+                    )
+                  )
+                )
+              ),
             React.createElement(
               "footer",
-              { className: "footer mt-4" },
-              React.createElement(
-                "p",
-                null,
-                "הזכויות שמורות - טל יעקב ",
-                React.createElement("i", { className: "bi bi-c-circle" })
-              )
+              { className: "footer" },
+              "©  2025 Finely - כל הזכויות שמורות לטל יעקב"
             )
           )
         );
