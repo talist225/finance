@@ -277,7 +277,7 @@
       }
       h1 {
         font-weight: 700 !important;
-        font-size: calc(2.5rem * var(--font-scale));
+        font-size: calc(3.2rem * var(--font-scale)); /* הגדלה משמעותית */
         background: linear-gradient(135deg, var(--primary-color), #cc5de8);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
@@ -1714,7 +1714,9 @@
                             React.createElement(
                               "p",
                               { className: "card-text fs-5" },
-                              totalIncome.toFixed(2) + " ₪"
+                              totalIncome.toLocaleString("he-IL", {
+                                minimumFractionDigits: 2,
+                              }) + " ₪"
                             )
                           )
                         )
@@ -1736,7 +1738,9 @@
                             React.createElement(
                               "p",
                               { className: "card-text fs-5" },
-                              totalExpenses.toFixed(2) + " ₪"
+                              totalExpenses.toLocaleString("he-IL", {
+                                minimumFractionDigits: 2,
+                              }) + " ₪"
                             )
                           )
                         )
@@ -1758,7 +1762,9 @@
                             React.createElement(
                               "p",
                               { className: "card-text fs-5" },
-                              balance.toFixed(2) + " ₪"
+                              balance.toLocaleString("he-IL", {
+                                minimumFractionDigits: 2,
+                              }) + " ₪"
                             )
                           )
                         )
@@ -1846,18 +1852,29 @@
                               React.createElement(
                                 "p",
                                 { className: "card-text" },
-                                "הכנסות: " + data.income.toFixed(2) + " ₪"
+                                "הכנסות: " +
+                                  data.income.toLocaleString("he-IL", {
+                                    minimumFractionDigits: 2,
+                                  }) +
+                                  " ₪"
                               ),
                               React.createElement(
                                 "p",
                                 { className: "card-text" },
-                                "הוצאות: " + data.expenses.toFixed(2) + " ₪"
+                                "הוצאות: " +
+                                  data.expenses.toLocaleString("he-IL", {
+                                    minimumFractionDigits: 2,
+                                  }) +
+                                  " ₪"
                               ),
                               React.createElement(
                                 "p",
                                 { className: "card-text" },
                                 "מאזן: " +
-                                  (data.income - data.expenses).toFixed(2) +
+                                  (data.income - data.expenses).toLocaleString(
+                                    "he-IL",
+                                    { minimumFractionDigits: 2 }
+                                  ) +
                                   " ₪"
                               )
                             )
@@ -1919,7 +1936,9 @@
                                       ? "text-success"
                                       : "text-danger",
                                 },
-                                amount.toFixed(2) + " ₪"
+                                amount.toLocaleString("he-IL", {
+                                  minimumFractionDigits: 2,
+                                }) + " ₪"
                               )
                             ),
                             index < Object.keys(categorySummary).length - 1 &&
@@ -2000,7 +2019,9 @@
                               React.createElement(
                                 "td",
                                 null,
-                                t.amount.toFixed(2) + " ₪"
+                                t.amount.toLocaleString("he-IL", {
+                                  minimumFractionDigits: 2,
+                                }) + " ₪"
                               ),
                               React.createElement(
                                 "td",
@@ -2238,7 +2259,9 @@
                               React.createElement(
                                 "td",
                                 null,
-                                s.amount.toFixed(2) + " ₪"
+                                s.amount.toLocaleString("he-IL", {
+                                  minimumFractionDigits: 2,
+                                }) + " ₪"
                               ),
                               React.createElement("td", null, s.location),
                               React.createElement(
