@@ -39,6 +39,7 @@
       .container {
         max-width: calc(1000px * var(--section-scale));
         padding: calc(15px * var(--section-scale));
+        margin: 0 auto;
       }
       .dark-mode {
         background: linear-gradient(135deg, var(--dark-bg), #16213e) !important;
@@ -54,22 +55,20 @@
       .dark-mode .text-dark,
       .dark-mode .table,
       .dark-mode .form-control,
-      .dark-mode .form-select {
-        color: #fff !important;
-      }
+      .dark-mode .form-select,
+      .dark-mode .card,
       .dark-mode .table-bordered,
       .dark-mode .form-control,
       .dark-mode .form-select,
-      .dark-mode .btn-outline-secondary {
-        border-color: rgba(255, 255, 255, 0.2) !important;
-      }
-      .dark-mode .table thead th {
-        background: rgba(73, 80, 87, 0.8) !important;
-      }
+      .dark-mode .btn-outline-secondary,
+      .dark-mode .table thead th,
       .dark-mode .btn-outline-primary,
-      .dark-mode .btn-nav {
-        border-color: var(--dark-accent);
-        color: var(--dark-accent);
+      .dark-mode .btn-nav,
+      .dark-mode .footer,
+      .dark-mode .category-summary hr {
+        border-color: rgba(255, 255, 255, 0.2) !important;
+        color: #fff !important;
+        background-color: rgba(73, 80, 87, 0.8) !important;
       }
       .dark-mode .btn-outline-primary:hover,
       .dark-mode .btn-nav:hover,
@@ -77,12 +76,13 @@
         background-color: rgba(96, 165, 250, 0.1);
         color: #3b82f6;
       }
-      .dark-mode .footer,
-      .dark-mode .category-summary hr {
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-      }
       .offcanvas {
         transition: transform 0.3s;
+      }
+      .offcanvas-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
       }
       .btn-primary {
         background-color: var(--primary-color);
@@ -141,19 +141,24 @@
         color: var(--dark-accent);
         border-color: var(--dark-accent);
       }
-      .btn-nav .bi-fire {
-        color: #ff4500;
-        transition: transform 0.3s, color 0.3s;
+      .btn-nav .new-badge {
+        background: #ff4500;
+        color: #fff;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-size: calc(0.8rem * var(--font-scale));
+        transform: rotate(15deg);
+        transition: transform 0.3s, background-color 0.3s;
       }
-      .dark-mode .btn-nav .bi-fire {
-        color: #ff6347;
+      .dark-mode .btn-nav .new-badge {
+        background: #ff6347;
       }
-      .btn-nav:hover .bi-fire {
-        transform: scale(1.2);
-        color: #ff6347;
+      .btn-nav:hover .new-badge {
+        transform: rotate(15deg) scale(1.1);
+        background: #ff6347;
       }
-      .dark-mode .btn-nav:hover .bi-fire {
-        color: #ff7f50;
+      .dark-mode .btn-nav:hover .new-badge {
+        background: #ff7f50;
       }
       .btn-settings {
         background-color: var(--primary-color);
@@ -373,32 +378,121 @@
       .dark-mode .insights-list li {
         background-color: rgba(96, 165, 250, 0.1);
       }
+      .summary-card.income {
+        background: #28a745;
+        color: #fff;
+      }
+      .dark-mode .summary-card.income {
+        background: #218838;
+      }
+      .summary-card.expenses {
+        background: #dc3545;
+        color: #fff;
+      }
+      .dark-mode .summary-card.expenses {
+        background: #c82333;
+      }
+      .summary-card.balance-positive {
+        background: #17a2b8;
+        color: #fff;
+      }
+      .dark-mode .summary-card.balance-positive {
+        background: #138496;
+      }
+      .summary-card.balance-negative {
+        background: #dc3545;
+        color: #fff;
+      }
+      .dark-mode .summary-card.balance-negative {
+        background: #c82333;
+      }
       .monthly-summary .income-text {
-        color: #28a745;
+        background: #28a745;
+        color: #fff;
       }
       .dark-mode .monthly-summary .income-text {
-        color: #51cf66;
+        background: #218838;
       }
       .monthly-summary .expense-text {
-        color: #dc3545;
+        background: #dc3545;
+        color: #fff;
       }
       .dark-mode .monthly-summary .expense-text {
-        color: #ff6b6b;
+        background: #c82333;
       }
       .monthly-summary .balance-text-positive {
-        color: #007bff;
+        background: #17a2b8;
+        color: #fff;
       }
       .dark-mode .monthly-summary .balance-text-positive {
-        color: #60a5fa;
+        background: #138496;
       }
       .monthly-summary .balance-text-negative {
-        color: #dc3545;
+        background: #dc3545;
+        color: #fff;
       }
       .dark-mode .monthly-summary .balance-text-negative {
-        color: #ff6b6b;
+        background: #c82333;
       }
       .btn-success {
         white-space: nowrap;
+      }
+      .family-size-container {
+        position: fixed;
+        top: calc(60px * var(--section-scale));
+        left: calc(10px * var(--section-scale));
+        width: calc(160px * var(--section-scale));
+        transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+        z-index: 1000;
+      }
+      .family-size-container.minimized {
+        transform: translateX(calc(-130px * var(--section-scale)));
+        width: calc(40px * var(--section-scale));
+      }
+      .family-size-container .card-body {
+        padding: calc(10px * var(--section-scale));
+        display: contents;
+      }
+      .family-size-container.minimized .card-body {
+        display: none;
+      }
+      .family-size-container .form-control {
+        max-width: calc(100px * var(--section-scale));
+        display: inline-block;
+      }
+      .family-size-container .btn-primary {
+        font-size: calc(0.8rem * var(--font-scale));
+        padding: calc(0.3rem * var(--font-scale))
+          calc(0.6rem * var(--font-scale));
+      }
+      .family-size-container .row {
+        align-items: center;
+      }
+      .family-size-toggle {
+        position: absolute;
+        top: calc(10px * var(--section-scale));
+        right: calc(-30px * var(--section-scale));
+        width: calc(30px * var(--section-scale));
+        height: calc(30px * var(--section-scale));
+        font-size: calc(0.9rem * var(--font-scale));
+        background-color: var(--primary-color);
+        color: #fff;
+        border-radius: 4px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background-color 0.3s, transform 0.3s;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+      }
+      .dark-mode .family-size-toggle {
+        background-color: var(--dark-accent);
+      }
+      .family-size-toggle:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+      }
+      .dark-mode .family-size-toggle:hover {
+        background-color: #3b82f6;
       }
     </style>
   </head>
@@ -492,6 +586,7 @@
           editCategory: "",
           editError: "",
           familySize: 1,
+          minimizedFamilySize: false,
         });
         const savingsChartRef = useRef(null),
           savingsChartInstance = useRef(null);
@@ -529,26 +624,31 @@
             "fontSize",
             "familySize",
           ].reduce((acc, key) => {
-            acc[key] = JSON.parse(
-              localStorage.getItem(key) ||
-                (key === "darkMode"
-                  ? "true"
+            const storedValue = localStorage.getItem(key);
+            try {
+              acc[key] = storedValue
+                ? JSON.parse(storedValue)
+                : key === "darkMode"
+                ? true
+                : key === "fontSize"
+                ? "medium"
+                : key === "familySize"
+                ? 1
+                : [];
+            } catch (e) {
+              console.error(`Error parsing localStorage for ${key}:`, e);
+              acc[key] =
+                key === "darkMode"
+                  ? true
                   : key === "fontSize"
-                  ? '"medium"'
+                  ? "medium"
                   : key === "familySize"
-                  ? "1"
-                  : "[]")
-            );
+                  ? 1
+                  : [];
+            }
             return acc;
           }, {});
-          setState((s) => ({
-            ...s,
-            transactions: savedData.transactions,
-            savings: savedData.savings,
-            darkMode: savedData.darkMode,
-            fontSize: savedData.fontSize,
-            familySize: savedData.familySize,
-          }));
+          setState((s) => ({ ...s, ...savedData }));
         }, []);
         useEffect(() => {
           [
@@ -745,6 +845,11 @@
           setState((s) => ({ ...s }));
           showToast("מספר בני המשפחה עודכן בהצלחה");
         };
+        const toggleFamilySize = () =>
+          setState((s) => ({
+            ...s,
+            minimizedFamilySize: !s.minimizedFamilySize,
+          }));
         const deleteTransaction = (id) => {
           setState((s) => ({
             ...s,
@@ -1055,7 +1160,7 @@
             insights.push(
               `החסכונות שלך נשארו ללא שינוי (${totalSavings.toFixed(
                 2
-              )} ₪). שקול להגדיל את ההפרשות החודשיות לחיסכון, אפילו בסכומים קטנים, כדי לבנות עתיד פיננסי חזק יותר.`
+              )} ₪). שקול להגדיל את ההפרשות החודשיות לחסכונות, אפילו בסכומים קטנים, כדי לבנות עתיד פיננסי חזק יותר.`
             );
           const savingsByLocation = state.savings.reduce(
             (acc, s) => ({
@@ -1215,7 +1320,7 @@
           link.href = URL.createObjectURL(blob);
           link.download = "transactions.csv";
           link.click();
-          URL.revokeObjectURL(blob);
+          URL.revokeObjectURL(link.href);
         };
         const FormField = ({
           type,
@@ -1514,7 +1619,13 @@
                         setState((s) => ({ ...s, activeTab: tab }));
                       },
                     },
-
+                    tab === "insights"
+                      ? React.createElement(
+                          "span",
+                          { className: "new-badge" },
+                          "חדש!"
+                        )
+                      : null,
                     tab === "transactions"
                       ? "פעולות"
                       : tab === "savings"
@@ -1522,43 +1633,6 @@
                       : tab === "insights"
                       ? "תובנות"
                       : "אודות"
-                  )
-                )
-              ),
-              React.createElement("hr", null),
-              React.createElement(
-                "div",
-                { className: "mb-3" },
-                React.createElement(
-                  "h5",
-                  { className: "fw-bold" },
-                  "הגדרות משפחה"
-                ),
-                React.createElement(
-                  "div",
-                  { className: "row g-3" },
-                  React.createElement(
-                    "div",
-                    { className: "col-12" },
-                    FormField({
-                      type: "number",
-                      placeholder: "מספר בני משפחה",
-                      value: state.familySize,
-                      onChange: (e) =>
-                        setState((s) => ({ ...s, familySize: e.target.value })),
-                    })
-                  ),
-                  React.createElement(
-                    "div",
-                    { className: "col-12" },
-                    React.createElement(
-                      "button",
-                      {
-                        onClick: updateFamilySize,
-                        className: "btn btn-primary w-100",
-                      },
-                      "שמור מספר בני משפחה"
-                    )
                   )
                 )
               ),
@@ -1587,6 +1661,73 @@
               )
             )
           ),
+          state.activeTab === "transactions" &&
+            React.createElement(
+              "div",
+              {
+                className: `family-size-container ${
+                  state.minimizedFamilySize ? "minimized" : ""
+                }`,
+              },
+              React.createElement(
+                "div",
+                { className: "card bg-light fade-in" },
+                React.createElement(
+                  "button",
+                  {
+                    className: "family-size-toggle",
+                    onClick: toggleFamilySize,
+                    title: state.minimizedFamilySize ? "הצג" : "מזער",
+                  },
+                  React.createElement("i", {
+                    className: `bi ${
+                      state.minimizedFamilySize
+                        ? "bi-chevron-right"
+                        : "bi-chevron-left"
+                    }`,
+                  })
+                ),
+                React.createElement(
+                  "div",
+                  { className: "card-body" },
+                  React.createElement(
+                    "h5",
+                    { className: "fw-bold mb-3" },
+                    "כמות נפשות"
+                  ),
+                  React.createElement(
+                    "div",
+                    { className: "row g-2" },
+                    React.createElement(
+                      "div",
+                      { className: "col-auto" },
+                      FormField({
+                        type: "number",
+                        placeholder: "מספר נפשות",
+                        value: state.familySize,
+                        onChange: (e) =>
+                          setState((s) => ({
+                            ...s,
+                            familySize: e.target.value,
+                          })),
+                      })
+                    ),
+                    React.createElement(
+                      "div",
+                      { className: "col-auto" },
+                      React.createElement(
+                        "button",
+                        {
+                          onClick: updateFamilySize,
+                          className: "btn btn-primary",
+                        },
+                        "שמור"
+                      )
+                    )
+                  )
+                )
+              )
+            ),
           React.createElement("h1", { className: "fade-in" }, "Finely"),
           state.activeTab === "transactions" &&
             React.createElement(
@@ -1747,16 +1888,29 @@
                   "div",
                   { className: "row g-3" },
                   [
-                    { title: "הכנסות", amount: totalIncome, color: "success" },
-                    { title: "הוצאות", amount: totalExpenses, color: "danger" },
-                    { title: "מאזן", amount: balance, color: "primary" },
-                  ].map(({ title, amount, color }) =>
+                    {
+                      title: "הכנסות",
+                      amount: totalIncome,
+                      className: "income",
+                    },
+                    {
+                      title: "הוצאות",
+                      amount: totalExpenses,
+                      className: "expenses",
+                    },
+                    {
+                      title: "מאזן",
+                      amount: balance,
+                      className:
+                        balance >= 0 ? "balance-positive" : "balance-negative",
+                    },
+                  ].map(({ title, amount, className }) =>
                     React.createElement(
                       "div",
                       { key: title, className: "col-md-4" },
                       React.createElement(
                         "div",
-                        { className: `card bg-${color} text-white` },
+                        { className: `card summary-card ${className}` },
                         React.createElement(
                           "div",
                           { className: "card-body" },
@@ -2147,7 +2301,7 @@
                 React.createElement(
                   "p",
                   null,
-                  "ברוכים הבאים ל-Finely! האפליקציה הזו נועדה לעזור לכם לנהל את הכספים שלכם בצורה פשוטה ויעילה. תוכלו לעקוב אחר ההכנסות וההוצאות שלכם, להגדיר חסכונות ולקבל תובנות פיננסיות שיעזרו לכם לקבל החלטות מושכלות. התחילו עכשיו וקחו שליטה על העתיד הפיננסי שלכם!"
+                  "ברוכים הבאים ל-Finely! האפליקציה הזו נועדה לעזור לכם לנהל את הכספים שלכם בצורה פשוטה ויעילה. תוכלו לעקוב אחר ההכנסות וההוצאות שלכם, להגדיר חסכונות ולקבל תובנות פיננסיות שיעזרו לכם לקבל החלטות מושכלות. האפליקציה פותחה ללא מטרות רווח, במטרה לסייע לכל אדם לנהל את כספיו בצורה נגישה ויעילה. התחילו עכשיו וקחו שליטה על העתיד הפיננסי שלכם!"
                 )
               ),
             }),
