@@ -377,15 +377,16 @@
       .about-tooltip {
         display: none;
         position: absolute;
-        top: calc(2.5rem * var(--section-scale));
-        left: calc(2rem * var(--section-scale));
+        top: calc(2rem * var(--section-scale));
+        left: calc(0.5rem * var(--section-scale));
         background-color: #f8f9fa;
         color: #212529;
         padding: calc(0.5rem * var(--font-scale));
         border-radius: 5px;
         box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         font-size: calc(0.9rem * var(--font-scale));
-        max-width: calc(400px * var(--section-scale));
+        max-width: calc(600px * var(--section-scale)); /* היה 400px */
+        min-width: calc(250px * var(--section-scale)); /* חדש */
         white-space: normal;
         line-height: 1.5;
         z-index: 1000;
@@ -1325,7 +1326,11 @@
             },
             React.createElement(
               "div",
-              { className: "offcanvas-header" },
+              {
+                className:
+                  "offcanvas-header d-flex justify-content-between align-items-center",
+                style: { gap: "1rem" },
+              },
               React.createElement(
                 "h5",
                 {
@@ -1340,6 +1345,18 @@
                 "data-bs-dismiss": "offcanvas",
                 "aria-label": "סגור",
               })
+            ),
+            React.createElement(
+              "div",
+              { className: "about-icon" },
+              React.createElement("i", {
+                className: "bi bi-patch-question",
+              }),
+              React.createElement(
+                "div",
+                { className: "about-tooltip" },
+                "Finely - פתרון חכם לניהול פיננסי אישי ומשפחתי, עם מעקב קל וברור אחרי הכנסות, הוצאות וחסכונות דרך ממשק אינטואיטיבי וגרפים מובנים"
+              )
             ),
             React.createElement(
               "div",
@@ -1391,7 +1408,16 @@
                 ),
                 React.createElement(
                   "div",
-                  { className: "d-flex justify-content-between mt-auto" },
+                  {
+                    className:
+                      "d-flex justify-content-center align-items-center gap-3 mt-auto mb-2",
+                    style: {
+                      position: "absolute",
+                      bottom: "20px",
+                      left: 0,
+                      right: 0,
+                    },
+                  },
                   React.createElement(
                     "button",
                     {
@@ -1417,16 +1443,7 @@
           React.createElement(
             "div",
             { className: "me-3 position-relative" },
-            React.createElement(
-              "div",
-              { className: "about-icon" },
-              React.createElement("i", { className: "bi bi-info-square-fill" }),
-              React.createElement(
-                "div",
-                { className: "about-tooltip" },
-                "Finely - ניהול פיננסי חכם לעקוב אחר הכנסות, הוצאות וחסכונות עם ממשק נוח וגרפים ברורים"
-              )
-            ),
+
             React.createElement("h1", { className: "fade-in" }, "Finely"),
             activeTab === "transactions" &&
               React.createElement(
