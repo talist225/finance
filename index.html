@@ -1583,12 +1583,20 @@
             },
             React.createElement(
               "div",
-              { className: "offcanvas-header" },
+              {
+                className: "offcanvas-header",
+                style: {
+                  display: "grid",
+                  gridTemplateColumns: "1fr auto",
+                  alignItems: "center",
+                },
+              },
               React.createElement(
                 "h5",
                 {
                   className: "offcanvas-title fw-bold",
                   id: "offcanvasSidebarLabel",
+                  style: { margin: 0 },
                 },
                 "תפריט"
               ),
@@ -1619,19 +1627,19 @@
                         setState((s) => ({ ...s, activeTab: tab }));
                       },
                     },
-                    tab === "insights"
-                      ? React.createElement(
-                          "span",
-                          { className: "new-badge" },
-                          "חדש!"
-                        )
-                      : null,
                     tab === "transactions"
                       ? "פעולות"
                       : tab === "savings"
                       ? "חסכונות"
                       : tab === "insights"
-                      ? "תובנות"
+                      ? [
+                          "תובנות",
+                          React.createElement(
+                            "span",
+                            { className: "new-badge", key: "new" },
+                            "חדש!"
+                          ),
+                        ]
                       : "אודות"
                   )
                 )
